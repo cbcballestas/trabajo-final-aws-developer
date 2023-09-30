@@ -1,5 +1,7 @@
 # Trabajo Final - AWS Developer 💻
 
+<img src="https://github.com/cbcballestas/trabajo-final-aws-developer/blob/main/imagenes/trabajo-final.drawio.png">
+
 ## Aspectos a tener en cuenta
 
 - La documentación de la configuración cloud se encuentra en la carpeta `documentos`
