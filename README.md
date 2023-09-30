@@ -1,4 +1,4 @@
-# Trabajo Final - AWS Developer 💻
+# Trabajo Final - AWS Developer - Mitocode 💻
 
 <img src="https://github.com/cbcballestas/trabajo-final-aws-developer/blob/main/imagenes/trabajo-final.drawio.png">
 
