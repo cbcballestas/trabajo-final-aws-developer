@@ -1,0 +1,84 @@
+version: '3'
+services:
+  notas_db:
+    image: postgres:15.2
+    container_name: notas_db_container
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: notas-db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    command: -p 5432
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.3.3
+    hostname: zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:7.3.3
+    hostname: kafka
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,CONNECTIONS_FROM_HOST://localhost:29092 #,IP_HOST://192.168.1.35:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONNECTIONS_FROM_HOST:PLAINTEXT #,IP_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop #amd64, for arm64 -> wjma90/kafdrop:latest,
+    container_name: kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      JVM_OPTS: -Xms32M -Xmx64M
+      SERVER_SERVLET_CONTEXTPATH: "/"
+      KAFKA_BROKERCONNECT: kafka:29092
+
+# Java API REST
+  producer:
+    container_name: alumnos_notas_producer
+    image: cballestas/alumnos-notas-producer:1.0.0
+    environment:
+      - KAFKA_HOST=kafka:29092
+    ports:
+      - "8080:8080"
+  consumer:
+    container_name: alumnos_notas_consumer
+    image: cballestas/alumnos-notas-consumer:1.0.0
+    ports:
+      - "8083:8083"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://notas_db:5432/notas-db
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=123456
+      - KAFKA_HOST=kafka:29092
+    depends_on:
+      - notas_db
+  expose-api:
+    container_name: alumnos_notas_api
+    image: cballestas/alumnos-notas-api:1.0.0
+    ports:
+      - "8084:8084"
+    environment:
+      - DATABASE_URL=jdbc:postgresql://notas_db:5432/notas-db
+      - DATABASE_USERNAME=admin
+      - DATABASE_PASSWORD=123456
+    depends_on:
+      - notas_db
