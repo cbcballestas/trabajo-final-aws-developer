@@ -27,6 +27,6 @@
     ```shell
     curl -X POST -H 'Content-Type: application/json' -d '{"dni": "67890","nombres": "Mauricio Ortega","notas": [10,11,12,13]}' http://alb-examen-final-945162407.us-east-1.elb.amazonaws.com:8080/alumno
     ```
-## ⚡️ Evidencias Kafdrop
+## 📷 Evidencias Kafdrop
 <img src="https://github.com/cbcballestas/trabajo-final-aws-developer/blob/main/imagenes/evidencia-kafdrop-1.png">
 <img src="https://github.com/cbcballestas/trabajo-final-aws-developer/blob/main/imagenes/evidencia-kafdrop-2.png">
