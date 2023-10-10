@@ -15,6 +15,12 @@
 
 - La documentación de la configuración cloud se encuentra en la carpeta `documentos`
 
+>
+>
+>⚠️[!IMPORTANT] ⚠️
+>
+> 🛑 <strong>Enpoints NO disponibles. </strong>🛑
+  
 - Los siguientes scripts corresponden a las operaciones GET Y POST:
 
   - Buscar por DNI
